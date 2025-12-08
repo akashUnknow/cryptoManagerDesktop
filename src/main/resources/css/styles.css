@@ -1,0 +1,218 @@
+/* =========================================================
+   GLOBAL ROOT COLORS
+   ========================================================= */
+.root {
+    -fx-primary: #3b82f6;
+    -fx-primary-dark: #2563eb;
+    -fx-primary-darker: #1d4ed8;
+
+    -fx-bg: #ffffff;
+    -fx-surface: #f8fafc;
+    -fx-border: #d1d5db;
+
+    -fx-text-dark: #1f2937;
+    -fx-text-light: #6b7280;
+
+    -fx-shadow: rgba(0,0,0,0.15);
+}
+
+/* =========================================================
+   APP TOP BAR
+   ========================================================= */
+.top-bar {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #2563eb);
+}
+
+.app-icon {
+    -fx-text-fill: white;
+}
+
+.app-title {
+    -fx-text-fill: white;
+}
+
+.app-subtitle {
+    -fx-text-fill: #e2e8f0;
+}
+
+.active-algorithm {
+    -fx-text-fill: white;
+}
+
+/* =========================================================
+   LEFT SIDEBAR
+   ========================================================= */
+.sidebar {
+    -fx-background-color: #f1f5f9;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 0 1 0 0;
+}
+
+.section-header {
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.algorithm-list {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+/* Primary Button (Encrypt) */
+.primary-btn {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 18;
+    -fx-font-weight: bold;
+}
+
+.primary-btn:hover {
+    -fx-background-color: -fx-primary-dark;
+}
+
+.primary-btn:pressed {
+    -fx-background-color: -fx-primary-darker;
+}
+
+/* Secondary Button (Decrypt, Load Sample) */
+.secondary-btn {
+    -fx-background-color: #e5e7eb;
+    -fx-text-fill: #1f2937;
+    -fx-background-radius: 10;
+}
+
+.secondary-btn:hover {
+    -fx-background-color: #d1d5db;
+}
+
+.secondary-btn:pressed {
+    -fx-background-color: #9ca3af;
+}
+
+/* Danger Button (Clear All) */
+.danger-btn {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+
+.danger-btn:hover {
+    -fx-background-color: #dc2626;
+}
+
+.danger-btn:pressed {
+    -fx-background-color: #b91c1c;
+}
+
+/* Icon-Only Button (Copy) */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3b82f6;
+}
+
+.icon-btn:hover {
+    -fx-text-fill: #1d4ed8;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+.card {
+    -fx-background-color: -fx-surface;
+    -fx-padding: 20;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, -fx-shadow, 12, 0, 0, 2);
+}
+
+.card-title {
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-size: 16px;
+}
+
+.card-subtitle {
+    -fx-text-fill: -fx-text-light;
+    -fx-font-size: 11px;
+}
+
+.card-icon {
+    -fx-text-fill: #3b82f6;
+}
+
+/* =========================================================
+   INPUT FIELDS (TextField, TextArea, ComboBox)
+   ========================================================= */
+.text-field,
+.text-area,
+.combo-box {
+    -fx-background-color: -fx-bg;
+    -fx-background-radius: 8;
+    -fx-border-color: -fx-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-padding: 6;
+}
+
+.text-area {
+    -fx-padding: 10;
+}
+
+/* Input labels */
+.field-label {
+    -fx-text-fill: #374151;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* Key length status badge */
+.key-status {
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 10px;
+}
+
+/* Output TextArea */
+.output-area {
+    -fx-background-color: #f1f5f9;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+/* =========================================================
+   SCROLL PANE
+   ========================================================= */
+.content-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+/* =========================================================
+   STATUS BAR
+   ========================================================= */
+.status-bar {
+    -fx-background-color: #f1f5f9;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-indicator {
+    -fx-text-fill: #22c55e; /* Green dot */
+}
+
+.status-text {
+    -fx-text-fill: #475569;
+}
+
+.version-text {
+    -fx-text-fill: #64748b;
+}
