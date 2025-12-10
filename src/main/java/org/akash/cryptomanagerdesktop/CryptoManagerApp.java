@@ -1,6 +1,5 @@
 package org.akash.cryptomanagerdesktop;
 
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -13,12 +12,13 @@ import java.security.Security;
 
 public class CryptoManagerApp extends Application {
 
-
     static {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
+            System.out.println("BouncyCastle provider registered successfully");
         }
     }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(
@@ -27,7 +27,6 @@ public class CryptoManagerApp extends Application {
 
         Scene scene = new Scene(loader.load(), 1400, 900);
 
-        // Load CSS
         scene.getStylesheets().add(
                 getClass().getResource("/css/styles.css").toExternalForm()
         );
@@ -35,34 +34,21 @@ public class CryptoManagerApp extends Application {
         primaryStage.setTitle("CryptoManager - Professional Cryptography Suite");
         primaryStage.setScene(scene);
 
-        // Set application icon
-//        try {
-//            primaryStage.getIcons().add(
-//                    new Image(getClass().getResourceAsStream("/images/icon.png"))
-//            );
-//        } catch (Exception e) {
-//            // Icon loading failed, continue without it
-//        }
-        Screen screen= Screen.getPrimary();
+        Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         double screenWidth = bounds.getWidth();
         double screenHeight = bounds.getHeight();
 
         if (screenWidth <= 1600) {
-            // LAPTOP — USE FULL SCREEN
             primaryStage.setX(bounds.getMinX());
             primaryStage.setY(bounds.getMinY());
             primaryStage.setWidth(bounds.getWidth());
             primaryStage.setHeight(bounds.getHeight());
         } else {
-            // DESKTOP — USE 70% WINDOW SIZE
             double newWidth = screenWidth * 0.70;
             double newHeight = screenHeight * 0.80;
-
             primaryStage.setWidth(newWidth);
             primaryStage.setHeight(newHeight);
-
-            // Center window
             primaryStage.setX(bounds.getMinX() + (screenWidth - newWidth) / 2);
             primaryStage.setY(bounds.getMinY() + (screenHeight - newHeight) / 2);
         }

@@ -1,19 +1,17 @@
 package org.akash.cryptomanagerdesktop.service;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.Provider;
 import java.security.Security;
 
 public class CryptoService {
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+    // Remove static block - provider is initialized in BouncyCastleLauncher
 
     public static class CryptoResult {
         private final String result;
@@ -34,11 +32,14 @@ public class CryptoService {
     public CryptoResult encrypt(String algorithm, String mode, String padding,
                                 String keyHex, String ivHex, String dataHex,
                                 boolean isTextInput, Integer tagLength) {
-//        System.out.println("Encrypt called with algorithm: " + algorithm + ", mode: " + mode +
-//                ", padding: " + padding + ", keyHex: " + keyHex + ", ivHex: " + ivHex +
-//                ", dataHex: " + dataHex + ", isTextInput: " + isTextInput +
-//                ", tagLength: " + tagLength);
         try {
+            // Verify BC provider is available
+            Provider bcProvider = Security.getProvider("BC");
+            if (bcProvider == null) {
+                return new CryptoResult(null, false,
+                        "BouncyCastle provider not available. Please restart the application.");
+            }
+
             byte[] keyBytes = hexToBytes(keyHex);
             byte[] dataBytes = isTextInput ?
                     dataHex.getBytes(StandardCharsets.UTF_8) : hexToBytes(dataHex);
@@ -46,7 +47,8 @@ public class CryptoService {
             String transformation = buildTransformation(algorithm, mode, padding);
             SecretKey key = createSecretKey(algorithm, keyBytes);
 
-            Cipher cipher = Cipher.getInstance(transformation, "BC");
+            // Use BC provider directly
+            Cipher cipher = Cipher.getInstance(transformation, bcProvider);
 
             if (mode.equals("ECB")) {
                 cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -56,7 +58,6 @@ public class CryptoService {
                 GCMParameterSpec spec = new GCMParameterSpec(tagLen, ivBytes);
                 cipher.init(Cipher.ENCRYPT_MODE, key, spec);
             } else if (mode.equals("CCM")) {
-                // CCM not directly supported by standard Java, requires custom impl
                 return new CryptoResult(null, false,
                         "CCM mode requires specialized library implementation");
             } else {
@@ -71,6 +72,7 @@ public class CryptoService {
             return new CryptoResult(result, true, null);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return new CryptoResult(null, false, e.getMessage());
         }
     }
@@ -79,13 +81,21 @@ public class CryptoService {
                                 String keyHex, String ivHex, String cipherHex,
                                 boolean outputAsText, Integer tagLength) {
         try {
+            // Verify BC provider is available
+            Provider bcProvider = Security.getProvider("BC");
+            if (bcProvider == null) {
+                return new CryptoResult(null, false,
+                        "BouncyCastle provider not available. Please restart the application.");
+            }
+
             byte[] keyBytes = hexToBytes(keyHex);
             byte[] cipherBytes = hexToBytes(cipherHex);
 
             String transformation = buildTransformation(algorithm, mode, padding);
             SecretKey key = createSecretKey(algorithm, keyBytes);
 
-            Cipher cipher = Cipher.getInstance(transformation, "BC");
+            // Use BC provider directly
+            Cipher cipher = Cipher.getInstance(transformation, bcProvider);
 
             if (mode.equals("ECB")) {
                 cipher.init(Cipher.DECRYPT_MODE, key);
@@ -110,6 +120,7 @@ public class CryptoService {
             return new CryptoResult(result, true, null);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return new CryptoResult(null, false, e.getMessage());
         }
     }
