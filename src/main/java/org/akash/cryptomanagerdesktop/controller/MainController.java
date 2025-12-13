@@ -5,6 +5,7 @@ import javafx.scene.layout.VBox;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import org.akash.cryptomanagerdesktop.service.CryptoService;
+import org.akash.cryptomanagerdesktop.util.KeyResolver;
 
 public class MainController {
 
@@ -174,6 +175,7 @@ public class MainController {
     @FXML
     private void handleEncrypt() {
         try {
+            resolveKeyIfTextInput();
             String keyHex = buildKeyHex();
             String ivHex = ivField.getText().trim();
             String data = inputArea.getText().trim();
@@ -248,7 +250,7 @@ public class MainController {
 
     private String buildKeyHex() {
         String k1 = key1Field.getText().trim();
-        if (currentAlgorithm.equals("DESede") || currentAlgorithm.equals("DESX")) {
+        if (currentAlgorithm.equals("DESede") || currentAlgorithm.equals("DESX") ) {
             String k2 = key2Field.getText().trim();
             String k3 = key3Field.getText().trim();
             return k1 + k2 + k3;
@@ -270,4 +272,14 @@ public class MainController {
         pause.setOnFinished(e -> statusLabel.setText("Ready"));
         pause.play();
     }
+    private void resolveKeyIfTextInput() {
+        if (!"Text".equals(inputTypeCombo.getValue())) return;
+
+        String label = inputArea.getText().trim();
+        if (label.isEmpty()) return;
+
+        String hexKey = KeyResolver.resolveKey(label);
+        key1Field.setText(hexKey);
+    }
+
 }
