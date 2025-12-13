@@ -5,7 +5,9 @@ import javafx.scene.layout.VBox;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import org.akash.cryptomanagerdesktop.service.CryptoService;
+import org.akash.cryptomanagerdesktop.util.Helper;
 import org.akash.cryptomanagerdesktop.util.KeyResolver;
+import org.akash.cryptomanagerdesktop.util.UiHelper;
 
 public class MainController {
 
@@ -39,34 +41,26 @@ public class MainController {
 
     private CryptoService cryptoService;
     private String currentAlgorithm = "DES";
+    Helper helper=new Helper();
+    UiHelper uiHelper=new UiHelper();
 
     @FXML
     public void initialize() {
         cryptoService = new CryptoService();
         setupAlgorithmList();
-        setupComboBoxes();
+        uiHelper.setupComboBoxes(modeCombo,paddingCombo,inputTypeCombo);
         setupEventHandlers();
         updateUIForAlgorithm("DES");
     }
 
     private void setupAlgorithmList() {
         algorithmList.getItems().addAll(
-                "DES", "3DES (DESede)", "DESX", "AES-128", "AES-192", "AES-256",
+                "DES", "3DES (DESede)", "AES-128", "AES-192", "AES-256",
                 "RSA", "Blowfish", "RC2", "RC4"
         );
         algorithmList.getSelectionModel().select(0);
     }
 
-    private void setupComboBoxes() {
-        modeCombo.getItems().addAll("ECB", "CBC", "CFB", "OFB", "CTR", "GCM", "CCM");
-        modeCombo.setValue("CBC");
-
-        paddingCombo.getItems().addAll("PKCS5", "NoPadding", "ISO9797_M1", "ISO9797_M2");
-        paddingCombo.setValue("PKCS5");
-
-        inputTypeCombo.getItems().addAll("HEX", "Text");
-        inputTypeCombo.setValue("HEX");
-    }
 
     private void setupEventHandlers() {
         algorithmList.getSelectionModel().selectedItemProperty().addListener(
@@ -104,7 +98,7 @@ public class MainController {
         }
 
         // Set sample data
-        loadSampleData();
+        helper.loadSampleData(currentAlgorithm, inputArea, key1Field, ivField, key2Field, key3Field);
         updateKeyLabel();
     }
 
@@ -114,27 +108,6 @@ public class MainController {
         return displayName;
     }
 
-    private void loadSampleData() {
-        switch (currentAlgorithm) {
-            case "DES":
-                key1Field.setText("0123456789ABCDEF");
-                inputArea.setText("1122334455667788");
-                ivField.setText("0001020304050607");
-                break;
-            case "DESede":
-                key1Field.setText("0123456789ABCDEF");
-                key2Field.setText("0123456789ABCDEF");
-                key3Field.setText("0123456789ABCDEF");
-                inputArea.setText("1122334455667788");
-                ivField.setText("0001020304050607");
-                break;
-            case "AES":
-                key1Field.setText("0123456789ABCDEF0123456789ABCDEF");
-                inputArea.setText("00112233445566778899AABBCCDDEEFF");
-                ivField.setText("000102030405060708090A0B0C0D0E0F");
-                break;
-        }
-    }
 
     private void updateKeyLabel() {
         int len = key1Field.getText().length();
@@ -244,7 +217,7 @@ public class MainController {
 
     @FXML
     private void handleLoadSample() {
-        loadSampleData();
+        helper.loadSampleData(currentAlgorithm, inputArea, key1Field, ivField, key2Field, key3Field);
         showStatus("Sample data loaded", "info");
     }
 
