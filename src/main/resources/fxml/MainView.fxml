@@ -61,6 +61,17 @@
 
             <Separator/>
 
+            <Label text="TOOLS" styleClass="section-header">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </Label>
+
+            <Button fx:id="converterBtn" text="🔄 Converter"
+                    onAction="#handleShowConverter" maxWidth="Infinity" styleClass="tool-btn"/>
+
+            <Separator/>
+
             <Label text="QUICK ACTIONS" styleClass="section-header">
                 <font>
                     <Font name="System Bold" size="12"/>
@@ -76,168 +87,250 @@
 
     <!-- Center Content -->
     <center>
-        <ScrollPane fitToWidth="true" styleClass="content-scroll">
-            <VBox spacing="20" styleClass="main-content">
-                <padding>
-                    <Insets top="25" right="25" bottom="25" left="25"/>
-                </padding>
+        <StackPane>
+            <!-- Crypto View -->
+            <ScrollPane fx:id="cryptoView" fitToWidth="true" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="main-content">
+                    <padding>
+                        <Insets top="25" right="25" bottom="25" left="25"/>
+                    </padding>
 
-                <!-- Input Configuration Card -->
-                <VBox styleClass="card" spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="📥" styleClass="card-icon">
-                            <font><Font size="20"/></font>
-                        </Label>
-                        <VBox>
-                            <Label text="Input Configuration" styleClass="card-title">
-                                <font><Font name="System Bold" size="15"/></font>
+                    <!-- Input Configuration Card -->
+                    <VBox styleClass="card" spacing="15">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="📥" styleClass="card-icon">
+                                <font><Font size="20"/></font>
                             </Label>
-                            <Label text="Configure your input data" styleClass="card-subtitle">
-                                <font><Font size="11"/></font>
+                            <VBox>
+                                <Label text="Input Configuration" styleClass="card-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Configure your input data" styleClass="card-subtitle">
+                                    <font><Font size="11"/></font>
+                                </Label>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Input Type" styleClass="field-label"/>
+                                <ComboBox fx:id="inputTypeCombo" maxWidth="Infinity"/>
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <VBox spacing="8">
+                            <Label text="Input Data" styleClass="field-label"/>
+                            <TextArea fx:id="inputArea" prefRowCount="6"
+                                      promptText="Enter your data here..."
+                                      wrapText="true" styleClass="data-area"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Encryption Settings Card -->
+                    <VBox styleClass="card" spacing="15">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="⚙️" styleClass="card-icon">
+                                <font><Font size="20"/></font>
                             </Label>
-                        </VBox>
-                    </HBox>
+                            <VBox>
+                                <Label text="Encryption Settings" styleClass="card-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Configure encryption parameters" styleClass="card-subtitle">
+                                    <font><Font size="11"/></font>
+                                </Label>
+                            </VBox>
+                        </HBox>
 
-                    <HBox spacing="15">
-                        <VBox spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="Input Type" styleClass="field-label"/>
-                            <ComboBox fx:id="inputTypeCombo" maxWidth="Infinity"/>
-                        </VBox>
-                        <Region HBox.hgrow="ALWAYS"/>
-                    </HBox>
+                        <HBox spacing="15">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Mode" styleClass="field-label"/>
+                                <ComboBox fx:id="modeCombo" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Padding" styleClass="field-label"/>
+                                <ComboBox fx:id="paddingCombo" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="key Label" styleClass="field-label"/>
+                                <TextField fx:id="keyLabel" maxWidth="Infinity"/>
+                            </VBox>
+                        </HBox>
 
-                    <VBox spacing="8">
-                        <Label text="Input Data" styleClass="field-label"/>
-                        <TextArea fx:id="inputArea" prefRowCount="6"
-                                  promptText="Enter your data here..."
-                                  wrapText="true" styleClass="data-area"/>
+                        <HBox spacing="15">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Key 1" styleClass="field-label"/>
+                                    <Label fx:id="keyLengthLabel" styleClass="key-status"/>
+                                </HBox>
+                                <TextField fx:id="key1Field" promptText="Enter key in HEX"/>
+                            </VBox>
+
+                            <VBox fx:id="key2Container" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Key 2" styleClass="field-label"/>
+                                <TextField fx:id="key2Field" promptText="Key 2 (HEX)"/>
+                            </VBox>
+
+                            <VBox fx:id="key3Container" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Key 3" styleClass="field-label"/>
+                                <TextField fx:id="key3Field" promptText="Key 3 (HEX)"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="IV / Nonce (HEX)" styleClass="field-label"/>
+                                <TextField fx:id="ivField" promptText="Initialization Vector"/>
+                            </VBox>
+
+                            <VBox fx:id="tagLengthContainer" spacing="8" visible="false" managed="false">
+                                <Label text="Tag Length" styleClass="field-label"/>
+                                <TextField fx:id="tagLengthField" prefWidth="120" promptText="128"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Operations Card -->
+                    <VBox styleClass="card" spacing="15">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🔐" styleClass="card-icon">
+                                <font><Font size="20"/></font>
+                            </Label>
+                            <VBox>
+                                <Label text="Execute Operations" styleClass="card-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Encrypt or decrypt your data" styleClass="card-subtitle">
+                                    <font><Font size="11"/></font>
+                                </Label>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15">
+                            <Button fx:id="encryptBtn" text="🔒 Encrypt"
+                                    onAction="#handleEncrypt"
+                                    styleClass="primary-btn"
+                                    prefWidth="200" prefHeight="45">
+                                <font><Font name="System Bold" size="13"/></font>
+                            </Button>
+                            <Button fx:id="decryptBtn" text="🔓 Decrypt"
+                                    onAction="#handleDecrypt"
+                                    styleClass="secondary-btn"
+                                    prefWidth="200" prefHeight="45">
+                                <font><Font name="System Bold" size="13"/></font>
+                            </Button>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Output Result Card -->
+                    <VBox styleClass="card" spacing="15">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="📤" styleClass="card-icon">
+                                <font><Font size="20"/></font>
+                            </Label>
+                            <VBox HBox.hgrow="ALWAYS">
+                                <Label text="Output Result" styleClass="card-title">
+                                    <font><Font name="System Bold" size="15"/></font>
+                                </Label>
+                                <Label text="Your encrypted/decrypted data" styleClass="card-subtitle">
+                                    <font><Font size="11"/></font>
+                                </Label>
+                            </VBox>
+                            <Button fx:id="copyBtn" text="📋 Copy"
+                                    onAction="#handleCopy"
+                                    styleClass="icon-btn"/>
+                        </HBox>
+
+                        <VBox spacing="8">
+                            <TextArea fx:id="outputArea" prefRowCount="6"
+                                      editable="false"
+                                      promptText="Result will appear here..."
+                                      wrapText="true" styleClass="output-area"/>
+                        </VBox>
                     </VBox>
                 </VBox>
+            </ScrollPane>
 
-                <!-- Encryption Settings Card -->
-                <VBox styleClass="card" spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="⚙️" styleClass="card-icon">
-                            <font><Font size="20"/></font>
-                        </Label>
-                        <VBox>
-                            <Label text="Encryption Settings" styleClass="card-title">
-                                <font><Font name="System Bold" size="15"/></font>
-                            </Label>
-                            <Label text="Configure encryption parameters" styleClass="card-subtitle">
-                                <font><Font size="11"/></font>
-                            </Label>
-                        </VBox>
+            <!-- Converter View -->
+            <ScrollPane fx:id="converterView" fitToWidth="true" styleClass="content-scroll" visible="false">
+                <VBox spacing="20" styleClass="main-content">
+                    <padding>
+                        <Insets top="25" right="25" bottom="25" left="25"/>
+                    </padding>
+
+                    <!-- Back Button -->
+                    <HBox alignment="CENTER_LEFT">
+                        <Button text="← Back to Crypto" onAction="#handleBackToCrypto" styleClass="secondary-btn"/>
                     </HBox>
 
-                    <HBox spacing="15">
-                        <VBox spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="Mode" styleClass="field-label"/>
-                            <ComboBox fx:id="modeCombo" maxWidth="Infinity"/>
-                        </VBox>
-                        <VBox spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="Padding" styleClass="field-label"/>
-                            <ComboBox fx:id="paddingCombo" maxWidth="Infinity"/>
-                        </VBox>
-                        <VBox spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="key Label" styleClass="field-label"/>
-                            <TextField fx:id="keyLabel" maxWidth="Infinity"/>
-                        </VBox>
-                    </HBox>
+                    <!-- Converter Card -->
+                    <VBox styleClass="card" spacing="20">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🔄" styleClass="card-icon">
+                                <font><Font size="24"/></font>
+                            </Label>
+                            <VBox>
+                                <Label text="Data Converter" styleClass="card-title">
+                                    <font><Font name="System Bold" size="18"/></font>
+                                </Label>
+                                <Label text="Convert between ASCII and HEX formats" styleClass="card-subtitle">
+                                    <font><Font size="12"/></font>
+                                </Label>
+                            </VBox>
+                        </HBox>
 
-                    <HBox spacing="15">
-                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Separator/>
+
+                        <!-- Conversion Type -->
+                        <VBox spacing="10">
+                            <Label text="Conversion Type" styleClass="field-label">
+                                <font><Font name="System Bold" size="14"/></font>
+                            </Label>
+                            <ComboBox fx:id="conversionTypeCombo" maxWidth="300"/>
+                        </VBox>
+
+                        <!-- Input -->
+                        <VBox spacing="10">
+                            <Label text="Input" styleClass="field-label">
+                                <font><Font name="System Bold" size="14"/></font>
+                            </Label>
+                            <TextArea fx:id="converterInputArea" prefRowCount="8"
+                                      promptText="Enter your data here..."
+                                      wrapText="true" styleClass="data-area"/>
+                        </VBox>
+
+                        <!-- Convert Button -->
+                        <HBox alignment="CENTER">
+                            <Button fx:id="convertBtn" text="🔄 Convert"
+                                    onAction="#handleConvert"
+                                    styleClass="primary-btn"
+                                    prefWidth="200" prefHeight="50">
+                                <font><Font name="System Bold" size="14"/></font>
+                            </Button>
+                        </HBox>
+
+                        <Separator/>
+
+                        <!-- Output -->
+                        <VBox spacing="10">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="Key 1" styleClass="field-label"/>
-                                <Label fx:id="keyLengthLabel" styleClass="key-status"/>
+                                <Label text="Output" styleClass="field-label" HBox.hgrow="ALWAYS">
+                                    <font><Font name="System Bold" size="14"/></font>
+                                </Label>
+                                <Button fx:id="copyConverterBtn" text="📋 Copy"
+                                        onAction="#handleCopyConverter"
+                                        styleClass="icon-btn"/>
                             </HBox>
-                            <TextField fx:id="key1Field" promptText="Enter key in HEX"/>
+                            <TextArea fx:id="converterOutputArea" prefRowCount="8"
+                                      editable="false"
+                                      promptText="Converted result will appear here..."
+                                      wrapText="true" styleClass="output-area"/>
                         </VBox>
-
-                        <VBox fx:id="key2Container" spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="Key 2" styleClass="field-label"/>
-                            <TextField fx:id="key2Field" promptText="Key 2 (HEX)"/>
-                        </VBox>
-
-                        <VBox fx:id="key3Container" spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="Key 3" styleClass="field-label"/>
-                            <TextField fx:id="key3Field" promptText="Key 3 (HEX)"/>
-                        </VBox>
-                    </HBox>
-
-                    <HBox spacing="15">
-                        <VBox spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="IV / Nonce (HEX)" styleClass="field-label"/>
-                            <TextField fx:id="ivField" promptText="Initialization Vector"/>
-                        </VBox>
-
-                        <VBox fx:id="tagLengthContainer" spacing="8" visible="false" managed="false">
-                            <Label text="Tag Length" styleClass="field-label"/>
-                            <TextField fx:id="tagLengthField" prefWidth="120" promptText="128"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-
-                <!-- Operations Card -->
-                <VBox styleClass="card" spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="🔐" styleClass="card-icon">
-                            <font><Font size="20"/></font>
-                        </Label>
-                        <VBox>
-                            <Label text="Execute Operations" styleClass="card-title">
-                                <font><Font name="System Bold" size="15"/></font>
-                            </Label>
-                            <Label text="Encrypt or decrypt your data" styleClass="card-subtitle">
-                                <font><Font size="11"/></font>
-                            </Label>
-                        </VBox>
-                    </HBox>
-
-                    <HBox spacing="15">
-                        <Button fx:id="encryptBtn" text="🔒 Encrypt"
-                                onAction="#handleEncrypt"
-                                styleClass="primary-btn"
-                                prefWidth="200" prefHeight="45">
-                            <font><Font name="System Bold" size="13"/></font>
-                        </Button>
-                        <Button fx:id="decryptBtn" text="🔓 Decrypt"
-                                onAction="#handleDecrypt"
-                                styleClass="secondary-btn"
-                                prefWidth="200" prefHeight="45">
-                            <font><Font name="System Bold" size="13"/></font>
-                        </Button>
-                    </HBox>
-                </VBox>
-
-                <!-- Output Result Card -->
-                <VBox styleClass="card" spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="📤" styleClass="card-icon">
-                            <font><Font size="20"/></font>
-                        </Label>
-                        <VBox HBox.hgrow="ALWAYS">
-                            <Label text="Output Result" styleClass="card-title">
-                                <font><Font name="System Bold" size="15"/></font>
-                            </Label>
-                            <Label text="Your encrypted/decrypted data" styleClass="card-subtitle">
-                                <font><Font size="11"/></font>
-                            </Label>
-                        </VBox>
-                        <Button fx:id="copyBtn" text="📋 Copy"
-                                onAction="#handleCopy"
-                                styleClass="icon-btn"/>
-                    </HBox>
-
-                    <VBox spacing="8">
-                        <TextArea fx:id="outputArea" prefRowCount="6"
-                                  editable="false"
-                                  promptText="Result will appear here..."
-                                  wrapText="true" styleClass="output-area"/>
                     </VBox>
                 </VBox>
-            </VBox>
-        </ScrollPane>
+            </ScrollPane>
+        </StackPane>
     </center>
 
     <!-- Bottom Status Bar -->

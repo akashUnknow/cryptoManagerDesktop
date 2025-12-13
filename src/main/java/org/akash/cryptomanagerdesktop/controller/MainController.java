@@ -1,257 +1,165 @@
 package org.akash.cryptomanagerdesktop.controller;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
-import org.akash.cryptomanagerdesktop.service.CryptoService;
-import org.akash.cryptomanagerdesktop.util.Helper;
-import org.akash.cryptomanagerdesktop.util.KeyResolver;
 import org.akash.cryptomanagerdesktop.util.UiHelper;
 
+/**
+ * Main Controller - Orchestrates all sub-controllers
+ * Following Single Responsibility Principle for better maintainability
+ */
 public class MainController {
 
-    public TextField keyLabel;
+    // FXML UI Components - Crypto View
     @FXML private ListView<String> algorithmList;
     @FXML private ComboBox<String> modeCombo;
     @FXML private ComboBox<String> paddingCombo;
     @FXML private ComboBox<String> inputTypeCombo;
-
     @FXML private TextField key1Field;
     @FXML private TextField key2Field;
     @FXML private TextField key3Field;
     @FXML private TextField ivField;
     @FXML private TextField tagLengthField;
-
+    @FXML private TextField keyLabel;
     @FXML private TextArea inputArea;
     @FXML private TextArea outputArea;
-
     @FXML private Label statusLabel;
     @FXML private Label algorithmLabel;
     @FXML private Label keyLengthLabel;
-
-    @FXML private Button encryptBtn;
-    @FXML private Button decryptBtn;
-    @FXML private Button copyBtn;
-    @FXML private Button clearBtn;
-    @FXML private Button sampleBtn;
-
     @FXML private VBox key2Container;
     @FXML private VBox key3Container;
     @FXML private VBox tagLengthContainer;
 
-    private CryptoService cryptoService;
-    private String currentAlgorithm = "DES";
-    Helper helper=new Helper();
-    UiHelper uiHelper=new UiHelper();
+    // FXML UI Components - Converter View
+    @FXML private ScrollPane cryptoView;
+    @FXML private ScrollPane converterView;
+    @FXML private ComboBox<String> conversionTypeCombo;
+    @FXML private TextArea converterInputArea;
+    @FXML private TextArea converterOutputArea;
+
+    // Sub-Controllers
+    private StatusController statusController;
+    private CryptoController cryptoController;
+    private ConverterController converterController;
+    private UIStateController uiStateController;
+    private ViewNavigationController viewNavigationController;
+
+    private UiHelper uiHelper;
 
     @FXML
     public void initialize() {
-        cryptoService = new CryptoService();
-        setupAlgorithmList();
-        uiHelper.setupComboBoxes(modeCombo,paddingCombo,inputTypeCombo);
+        initializeControllers();
+        setupUIComponents();
         setupEventHandlers();
-        updateUIForAlgorithm("DES");
+        uiStateController.updateUIForAlgorithm("DES");
     }
 
-    private void setupAlgorithmList() {
-        algorithmList.getItems().addAll(
-                "DES", "3DES (DESede)", "AES-128", "AES-192", "AES-256",
-                "RSA", "Blowfish", "RC2", "RC4"
-        );
-        algorithmList.getSelectionModel().select(0);
+    private void initializeControllers() {
+        // Initialize in dependency order
+        statusController = new StatusController();
+        statusController.setStatusLabel(statusLabel);
+
+        cryptoController = new CryptoController(statusController);
+        cryptoController.setFields(inputArea, outputArea, inputTypeCombo, modeCombo,
+                paddingCombo, key1Field, key2Field, key3Field, ivField,
+                tagLengthField, keyLabel);
+
+        converterController = new ConverterController(statusController);
+        converterController.setFields(conversionTypeCombo, converterInputArea,
+                converterOutputArea);
+
+        uiStateController = new UIStateController(statusController);
+        uiStateController.setFields(algorithmList, modeCombo, paddingCombo,
+                algorithmLabel, keyLengthLabel, key2Container, key3Container,
+                tagLengthContainer, key1Field, ivField, tagLengthField,
+                inputArea, key2Field, key3Field);
+
+        viewNavigationController = new ViewNavigationController(statusController);
+        viewNavigationController.setFields(cryptoView, converterView, algorithmLabel);
+
+        uiHelper = new UiHelper();
     }
 
+    private void setupUIComponents() {
+        uiStateController.setupAlgorithmList();
+        uiHelper.setupComboBoxes(modeCombo, paddingCombo, inputTypeCombo);
+        converterController.setupConverterComboBox();
+    }
 
     private void setupEventHandlers() {
+        // Algorithm selection
         algorithmList.getSelectionModel().selectedItemProperty().addListener(
                 (obs, old, newVal) -> {
-                    if (newVal != null) updateUIForAlgorithm(newVal);
+                    if (newVal != null) {
+                        uiStateController.updateUIForAlgorithm(newVal);
+                        cryptoController.setCurrentAlgorithm(uiStateController.getCurrentAlgorithm());
+                        viewNavigationController.setCurrentAlgorithm(uiStateController.getCurrentAlgorithm());
+                    }
                 }
         );
 
+        // Mode changes
         modeCombo.valueProperty().addListener((obs, old, newVal) -> {
-            updateIVRequirement(newVal);
-            updatePaddingForMode(newVal);
+            uiStateController.updateIVRequirement(newVal);
+            uiStateController.updatePaddingForMode(newVal);
         });
 
-        key1Field.textProperty().addListener((obs, old, newVal) -> updateKeyLabel());
+        // Key input changes
+        key1Field.textProperty().addListener((obs, old, newVal) ->
+                uiStateController.updateKeyLabel());
     }
 
-    private void updateUIForAlgorithm(String algo) {
-        currentAlgorithm = extractAlgorithm(algo);
-        algorithmLabel.setText("Active: " + algo);
-
-        // Update key fields visibility
-        boolean is3DES = algo.equals("3DES (DESede)") || algo.equals("DESX");
-        key2Container.setVisible(is3DES);
-        key2Container.setManaged(is3DES);
-        key3Container.setVisible(is3DES);
-        key3Container.setManaged(is3DES);
-
-        // Update modes for algorithm
-        if (algo.startsWith("AES")) {
-            if (!modeCombo.getItems().contains("GCM")) {
-                modeCombo.getItems().addAll("GCM", "CCM");
-            }
-        } else {
-            modeCombo.getItems().removeAll("GCM", "CCM");
-        }
-
-        // Set sample data
-        helper.loadSampleData(currentAlgorithm, inputArea, key1Field, ivField, key2Field, key3Field);
-        updateKeyLabel();
-    }
-
-    private String extractAlgorithm(String displayName) {
-        if (displayName.equals("3DES (DESede)")) return "DESede";
-        if (displayName.startsWith("AES")) return "AES";
-        return displayName;
-    }
-
-
-    private void updateKeyLabel() {
-        int len = key1Field.getText().length();
-        if (currentAlgorithm.equals("AES")) {
-            if (len == 32) keyLengthLabel.setText("AES-128 ✓");
-            else if (len == 48) keyLengthLabel.setText("AES-192 ✓");
-            else if (len == 64) keyLengthLabel.setText("AES-256 ✓");
-            else keyLengthLabel.setText("Invalid length");
-        } else if (currentAlgorithm.equals("DES")) {
-            keyLengthLabel.setText(len == 16 ? "DES-56 ✓" : "Invalid");
-        } else {
-            keyLengthLabel.setText("");
-        }
-    }
-
-    private void updateIVRequirement(String mode) {
-        boolean needsIV = !mode.equals("ECB");
-        ivField.setDisable(!needsIV);
-
-        boolean isAEAD = mode.equals("GCM") || mode.equals("CCM");
-        tagLengthContainer.setVisible(isAEAD);
-        tagLengthContainer.setManaged(isAEAD);
-        if (isAEAD && tagLengthField.getText().isEmpty()) {
-            tagLengthField.setText("128");
-        }
-    }
-
-    private void updatePaddingForMode(String mode) {
-        if (mode.equals("GCM") || mode.equals("CCM") ||
-                mode.equals("CFB") || mode.equals("OFB") || mode.equals("CTR")) {
-            paddingCombo.setValue("NoPadding");
-            paddingCombo.setDisable(true);
-        } else {
-            paddingCombo.setDisable(false);
-        }
-    }
+    // ============================================================
+    // FXML Event Handlers - Crypto Operations
+    // ============================================================
 
     @FXML
     private void handleEncrypt() {
-        try {
-            resolveKeyIfTextField();
-            String keyHex = buildKeyHex();
-            String ivHex = ivField.getText().trim();
-            String data = inputArea.getText().trim();
-            boolean isText = inputTypeCombo.getValue().equals("Text");
-            Integer tagLen = getTagLength();
-
-            CryptoService.CryptoResult result = cryptoService.encrypt(
-                    currentAlgorithm, modeCombo.getValue(), paddingCombo.getValue(),
-                    keyHex, ivHex, data, isText, tagLen
-            );
-
-            if (result.isSuccess()) {
-                outputArea.setText(result.getResult());
-                showStatus("✓ Encryption successful", "success");
-            } else {
-                showStatus("✗ Error: " + result.getError(), "error");
-            }
-        } catch (Exception e) {
-            showStatus("✗ Error: " + e.getMessage(), "error");
-        }
+        cryptoController.handleEncrypt();
     }
 
     @FXML
     private void handleDecrypt() {
-        try {
-            String keyHex = buildKeyHex();
-            String ivHex = ivField.getText().trim();
-            String cipher = inputArea.getText().trim();
-            boolean outputText = inputTypeCombo.getValue().equals("Text");
-            Integer tagLen = getTagLength();
-
-            CryptoService.CryptoResult result = cryptoService.decrypt(
-                    currentAlgorithm, modeCombo.getValue(), paddingCombo.getValue(),
-                    keyHex, ivHex, cipher, outputText, tagLen
-            );
-
-            if (result.isSuccess()) {
-                outputArea.setText(result.getResult());
-                showStatus("✓ Decryption successful", "success");
-            } else {
-                showStatus("✗ Error: " + result.getError(), "error");
-            }
-        } catch (Exception e) {
-            showStatus("✗ Error: " + e.getMessage(), "error");
-        }
+        cryptoController.handleDecrypt();
     }
 
     @FXML
     private void handleCopy() {
-        if (!outputArea.getText().isEmpty()) {
-            javafx.scene.input.Clipboard.getSystemClipboard().setContent(
-                    new javafx.scene.input.ClipboardContent() {{
-                        putString(outputArea.getText());
-                    }}
-            );
-            showStatus("✓ Copied to clipboard", "success");
-        }
+        cryptoController.handleCopy();
     }
 
     @FXML
     private void handleClear() {
-        inputArea.clear();
-        outputArea.clear();
-        showStatus("Cleared", "info");
+        cryptoController.handleClear();
     }
 
     @FXML
     private void handleLoadSample() {
-        helper.loadSampleData(currentAlgorithm, inputArea, key1Field, ivField, key2Field, key3Field);
-        showStatus("Sample data loaded", "info");
+        uiStateController.handleLoadSample();
     }
 
-    private String buildKeyHex() {
-        String k1 = key1Field.getText().trim();
-        if (currentAlgorithm.equals("DESede") || currentAlgorithm.equals("DESX") ) {
-            String k2 = key2Field.getText().trim();
-            String k3 = key3Field.getText().trim();
-            return k1 + k2 + k3;
-        }
-        return k1;
+    // ============================================================
+    // FXML Event Handlers - Converter Operations
+    // ============================================================
+
+    @FXML
+    private void handleShowConverter() {
+        viewNavigationController.showConverterView();
     }
 
-    private Integer getTagLength() {
-        String text = tagLengthField.getText().trim();
-        return text.isEmpty() ? null : Integer.parseInt(text);
+    @FXML
+    private void handleBackToCrypto() {
+        viewNavigationController.showCryptoView();
     }
 
-    private void showStatus(String message, String type) {
-        statusLabel.setText(message);
-        statusLabel.getStyleClass().removeAll("success", "error", "info");
-        statusLabel.getStyleClass().add(type);
-
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(e -> statusLabel.setText("Ready"));
-        pause.play();
-    }
-    private void resolveKeyIfTextField() {
-        if (keyLabel.getText().trim().isEmpty()) return;
-        String label = keyLabel.getText().trim();
-            String hexKey = KeyResolver.resolveKey(label);
-            key1Field.setText(hexKey);
-
+    @FXML
+    private void handleConvert() {
+        converterController.handleConvert();
     }
 
+    @FXML
+    private void handleCopyConverter() {
+        converterController.handleCopyConverter();
+    }
 }

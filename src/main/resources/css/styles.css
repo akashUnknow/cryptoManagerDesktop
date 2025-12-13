@@ -97,6 +97,22 @@
     -fx-background-color: #9ca3af;
 }
 
+/* Tool Button (Converter) */
+.tool-btn {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+}
+
+.tool-btn:hover {
+    -fx-background-color: #059669;
+}
+
+.tool-btn:pressed {
+    -fx-background-color: #047857;
+}
+
 /* Danger Button (Clear All) */
 .danger-btn {
     -fx-background-color: #ef4444;
@@ -167,6 +183,11 @@
     -fx-padding: 10;
 }
 
+.data-area {
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
+    -fx-font-size: 13px;
+}
+
 /* Input labels */
 .field-label {
     -fx-text-fill: #374151;
@@ -186,6 +207,8 @@
     -fx-border-color: #d1d5db;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
+    -fx-font-size: 13px;
 }
 
 /* =========================================================
@@ -211,6 +234,18 @@
 
 .status-text {
     -fx-text-fill: #475569;
+}
+
+.status-text.success {
+    -fx-text-fill: #22c55e;
+}
+
+.status-text.error {
+    -fx-text-fill: #ef4444;
+}
+
+.status-text.info {
+    -fx-text-fill: #3b82f6;
 }
 
 .version-text {
