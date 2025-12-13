@@ -11,6 +11,7 @@ import org.akash.cryptomanagerdesktop.util.UiHelper;
 
 public class MainController {
 
+    public TextField keyLabel;
     @FXML private ListView<String> algorithmList;
     @FXML private ComboBox<String> modeCombo;
     @FXML private ComboBox<String> paddingCombo;
@@ -148,7 +149,7 @@ public class MainController {
     @FXML
     private void handleEncrypt() {
         try {
-            resolveKeyIfTextInput();
+            resolveKeyIfTextField();
             String keyHex = buildKeyHex();
             String ivHex = ivField.getText().trim();
             String data = inputArea.getText().trim();
@@ -245,14 +246,12 @@ public class MainController {
         pause.setOnFinished(e -> statusLabel.setText("Ready"));
         pause.play();
     }
-    private void resolveKeyIfTextInput() {
-        if (!"Text".equals(inputTypeCombo.getValue())) return;
+    private void resolveKeyIfTextField() {
+        if (keyLabel.getText().trim().isEmpty()) return;
+        String label = keyLabel.getText().trim();
+            String hexKey = KeyResolver.resolveKey(label);
+            key1Field.setText(hexKey);
 
-        String label = inputArea.getText().trim();
-        if (label.isEmpty()) return;
-
-        String hexKey = KeyResolver.resolveKey(label);
-        key1Field.setText(hexKey);
     }
 
 }

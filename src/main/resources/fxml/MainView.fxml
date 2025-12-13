@@ -139,6 +139,10 @@
                             <Label text="Padding" styleClass="field-label"/>
                             <ComboBox fx:id="paddingCombo" maxWidth="Infinity"/>
                         </VBox>
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="key Label" styleClass="field-label"/>
+                            <TextField fx:id="keyLabel" maxWidth="Infinity"/>
+                        </VBox>
                     </HBox>
 
                     <HBox spacing="15">
