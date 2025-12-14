@@ -256,10 +256,10 @@
             <ScrollPane fx:id="converterView" fitToWidth="true" styleClass="content-scroll" visible="false">
                 <VBox spacing="20" styleClass="main-content">
                     <padding>
-                        <Insets top="25" right="25" bottom="25" left="25"/>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
                     </padding>
                     <!-- Converter Card -->
-                    <VBox styleClass="card" spacing="20">
+                    <VBox styleClass="card" spacing="10">
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <Label text="🔄" styleClass="card-icon">
                                 <font><Font size="24"/></font>
@@ -289,7 +289,7 @@
                             <Label text="Input" styleClass="field-label">
                                 <font><Font name="System Bold" size="14"/></font>
                             </Label>
-                            <TextArea fx:id="converterInputArea" prefRowCount="8"
+                            <TextArea fx:id="converterInputArea" prefRowCount="6"
                                       promptText="Enter your data here..."
                                       wrapText="true" styleClass="data-area"/>
                         </VBox>
@@ -316,7 +316,7 @@
                                         onAction="#handleCopyConverter"
                                         styleClass="icon-btn"/>
                             </HBox>
-                            <TextArea fx:id="converterOutputArea" prefRowCount="8"
+                            <TextArea fx:id="converterOutputArea" prefRowCount="7"
                                       editable="false"
                                       promptText="Converted result will appear here..."
                                       wrapText="true" styleClass="output-area"/>

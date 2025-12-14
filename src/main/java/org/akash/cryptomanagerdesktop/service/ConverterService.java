@@ -10,11 +10,12 @@ public class ConverterService {
      * @return HEX representation with spaces between bytes
      */
     public String asciiToHex(String ascii) {
-        if (ascii == null || ascii.isEmpty()) {
+        String cleanHex = ascii.replace(" ", "").trim().toUpperCase();
+        if (ascii == null || cleanHex.isEmpty()) {
             throw new IllegalArgumentException("Input cannot be null or empty");
         }
 
-        byte[] bytes = ascii.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = cleanHex.getBytes(StandardCharsets.UTF_8);
         StringBuilder hex = new StringBuilder();
 
         for (int i = 0; i < bytes.length; i++) {
@@ -70,4 +71,66 @@ public class ConverterService {
         String clean = hex.replace(" ", "").trim();
         return clean.matches("^[0-9A-Fa-f]+$") && clean.length() % 2 == 0;
     }
+
+    public String removeSpaces(String input) {
+        return input.replace(" ", "").trim().toUpperCase();
+    }
+
+    public String swapValue(String input) {
+        if (input == null) return "";
+        input=input.trim().replaceAll("\\s+", "");
+        if(input.length()%2!=0){
+            input=input+"F";
+        }
+        StringBuilder swapped=new StringBuilder(input.length());
+        for (int i = 0; i < input.length(); i+=2) {
+            swapped.append(input.charAt(i+1)).append(input.charAt(i));
+        }
+        return swapped.toString();
+    }
+
+    public String acc(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("Input is empty");
+        }
+        input=input.trim().replaceAll("\\s+", "");
+        String regex="^809";
+        if(input.length()==15){
+            int lastDigit = Character.getNumericValue(input.charAt(input.length() - 1));
+            int mathPro=(int) Math.pow(2,lastDigit);
+            String accCal=Integer.toHexString(mathPro).toUpperCase();
+            return accCal.length()<4?String.format("%4s", accCal).replace(' ', '0'):accCal;
+        }
+        if (input.length() == 18) {
+
+            // swap pairs (equivalent to JS replace(/(.)(.)/g,"$2$1"))
+            String swapped = swapPairs(input);
+
+            if (swapped.matches(regex + ".*")) {
+
+                String sliced = swapped.substring(3);
+
+                int lastDigit = Character.getNumericValue(
+                        sliced.charAt(sliced.length() - 1)
+                );
+
+                int mathPro = (int) Math.pow(2, lastDigit);
+                String finalAcc = Integer.toHexString(mathPro).toUpperCase();
+
+                return finalAcc.length() < 4
+                        ? String.format("%4s", finalAcc).replace(' ', '0')
+                        : finalAcc;
+            }
+        }
+        throw new IllegalArgumentException("Invalid ACC input");
+    }
+    private String swapPairs(String input) {
+        StringBuilder sb = new StringBuilder(input.length());
+        for (int i = 0; i < input.length(); i += 2) {
+            sb.append(input.charAt(i + 1))
+                    .append(input.charAt(i));
+        }
+        return sb.toString();
+    }
+
 }

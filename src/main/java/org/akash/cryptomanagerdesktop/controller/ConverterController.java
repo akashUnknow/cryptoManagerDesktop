@@ -29,7 +29,7 @@ public class ConverterController {
     public void setupConverterComboBox() {
         conversionTypeCombo.getItems().addAll(
                 "ASCII to HEX",
-                "HEX to ASCII"
+                "HEX to ASCII","Space Remover","Swap Value","ACC"
         );
         conversionTypeCombo.setValue("ASCII to HEX");
     }
@@ -46,10 +46,30 @@ public class ConverterController {
             String conversionType = conversionTypeCombo.getValue();
             String result;
 
-            if (conversionType.equals("ASCII to HEX")) {
-                result = converterService.asciiToHex(input);
-            } else {
-                result = converterService.hexToAscii(input);
+//            if (conversionType.equals("ASCII to HEX")) {
+//                result = converterService.asciiToHex(input);
+//            } else {
+//                result = converterService.hexToAscii(input);
+//            }
+            switch (conversionType){
+                case "ASCII to HEX":
+                    result=converterService.asciiToHex(input);
+                    break;
+                case "HEX to ASCII":
+                    result=converterService.hexToAscii(input);
+                    break;
+                case "Space Remover":
+                    result=converterService.removeSpaces(input);
+                    break;
+                case "Swap Value":
+                    result=converterService.swapValue(input);
+                    break;
+                case "ACC":
+                    result=converterService.acc(input);
+                    break;
+                default:
+                    statusController.showStatus("✗ Unknown conversion type", "error");
+                    return;
             }
 
             converterOutputArea.setText(result);

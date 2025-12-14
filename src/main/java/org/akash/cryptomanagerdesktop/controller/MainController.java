@@ -150,10 +150,6 @@ public class MainController {
         viewNavigationController.toggleView(converterBtn);
     }
 
-    @FXML
-    private void handleBackToCrypto() {
-        viewNavigationController.showCryptoView();
-    }
 
     @FXML
     private void handleConvert() {
