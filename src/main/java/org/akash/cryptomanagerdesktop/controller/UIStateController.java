@@ -55,8 +55,7 @@ public class UIStateController {
 
     public void setupAlgorithmList() {
         algorithmList.getItems().addAll(
-                "DES", "3DES (DESede)", "AES-128", "AES-192", "AES-256",
-                "RSA", "Blowfish", "RC2", "RC4"
+                "DES", "3DES (DESede)", "AES-128", "AES-192", "AES-256"
         );
         algorithmList.getSelectionModel().select(0);
     }

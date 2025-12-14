@@ -4,11 +4,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
+import java.util.Objects;
 
 public class CryptoManagerApp extends Application {
 
@@ -21,6 +23,7 @@ public class CryptoManagerApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))));
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/fxml/MainView.fxml")
         );
