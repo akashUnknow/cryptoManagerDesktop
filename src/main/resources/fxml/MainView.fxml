@@ -258,12 +258,6 @@
                     <padding>
                         <Insets top="25" right="25" bottom="25" left="25"/>
                     </padding>
-
-                    <!-- Back Button -->
-                    <HBox alignment="CENTER_LEFT">
-                        <Button text="← Back to Crypto" onAction="#handleBackToCrypto" styleClass="secondary-btn"/>
-                    </HBox>
-
                     <!-- Converter Card -->
                     <VBox styleClass="card" spacing="20">
                         <HBox alignment="CENTER_LEFT" spacing="10">

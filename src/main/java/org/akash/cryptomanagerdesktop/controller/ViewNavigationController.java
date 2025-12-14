@@ -1,5 +1,6 @@
 package org.akash.cryptomanagerdesktop.controller;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 
@@ -37,5 +38,14 @@ public class ViewNavigationController {
         cryptoView.setVisible(true);
         algorithmLabel.setText("Active: " + currentAlgorithm);
         statusController.showStatus("Crypto mode", "info");
+    }
+    public void toggleView(Button converterBtn) {
+        if (cryptoView.isVisible()) {
+            showConverterView();
+            converterBtn.setText("🔐 Crypto");
+        } else {
+            showCryptoView();
+            converterBtn.setText("🔄 Converter");
+        }
     }
 }

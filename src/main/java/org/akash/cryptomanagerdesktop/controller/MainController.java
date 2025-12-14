@@ -11,6 +11,7 @@ import org.akash.cryptomanagerdesktop.util.UiHelper;
  */
 public class MainController {
 
+    public Button converterBtn;
     // FXML UI Components - Crypto View
     @FXML private ListView<String> algorithmList;
     @FXML private ComboBox<String> modeCombo;
@@ -145,7 +146,8 @@ public class MainController {
 
     @FXML
     private void handleShowConverter() {
-        viewNavigationController.showConverterView();
+//        viewNavigationController.showConverterView();
+        viewNavigationController.toggleView(converterBtn);
     }
 
     @FXML

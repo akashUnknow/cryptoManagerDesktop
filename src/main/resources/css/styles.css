@@ -132,10 +132,12 @@
 .icon-btn {
     -fx-background-color: transparent;
     -fx-text-fill: #3b82f6;
+     -fx-cursor: hand;
 }
 
 .icon-btn:hover {
     -fx-text-fill: #1d4ed8;
+ -fx-cursor: hand;
 }
 
 /* =========================================================
