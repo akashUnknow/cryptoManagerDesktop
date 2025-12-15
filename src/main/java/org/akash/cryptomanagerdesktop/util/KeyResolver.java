@@ -28,9 +28,9 @@ public class KeyResolver {
             while ((line= br.readLine())!=null){
                 line=line.trim();
                 if (line.isEmpty() || line.startsWith("#"))   continue;
-                if (removeSemicolon && line.endsWith(";")){
-                    line=line.substring(0,line.length()-1);
-                }
+//                if (removeSemicolon && line.endsWith(";")){
+//                    line=line.substring(0,line.length()-1);
+//                }
                 String[] parts=line.split("=",2);
                 if(parts.length==2){
                     map.put(parts[0].trim(),parts[1].trim());

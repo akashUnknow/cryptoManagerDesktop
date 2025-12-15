@@ -1,2 +1,2 @@
-GBLYCA=datagen/AES/32;
-GBLYCA1=datagen/DES/32;
+GBLYCA=datagen/AES/32
+GBLYCA1=datagen/DES/32
