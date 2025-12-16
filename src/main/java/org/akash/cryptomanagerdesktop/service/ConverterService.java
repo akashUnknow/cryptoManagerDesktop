@@ -21,7 +21,7 @@ public class ConverterService {
         for (int i = 0; i < bytes.length; i++) {
             hex.append(String.format("%02X", bytes[i]));
             if (i < bytes.length - 1) {
-                hex.append(" ");
+                hex.append("");
             }
         }
 

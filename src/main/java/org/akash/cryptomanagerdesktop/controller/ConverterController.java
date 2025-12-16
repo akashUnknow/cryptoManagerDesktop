@@ -45,12 +45,6 @@ public class ConverterController {
 
             String conversionType = conversionTypeCombo.getValue();
             String result;
-
-//            if (conversionType.equals("ASCII to HEX")) {
-//                result = converterService.asciiToHex(input);
-//            } else {
-//                result = converterService.hexToAscii(input);
-//            }
             switch (conversionType){
                 case "ASCII to HEX":
                     result=converterService.asciiToHex(input);
