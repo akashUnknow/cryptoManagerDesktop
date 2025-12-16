@@ -141,5 +141,7 @@ public class CryptoController {
         String label = keyLabel.getText().trim();
         String hexKey = KeyResolver.resolveKey(label);
         key1Field.setText(hexKey);
+        key2Field.setText("");
+        key3Field.setText("");
     }
 }
