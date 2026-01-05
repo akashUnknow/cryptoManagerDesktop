@@ -5,10 +5,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.akash.cryptomanagerdesktop.util.UiHelper;
 
-/**
- * Main Controller - Orchestrates all sub-controllers
- * Following Single Responsibility Principle for better maintainability
- */
 public class MainController {
 
     public Button converterBtn;

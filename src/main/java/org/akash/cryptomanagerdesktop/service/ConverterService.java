@@ -10,7 +10,7 @@ public class ConverterService {
      * @return HEX representation with spaces between bytes
      */
     public String asciiToHex(String ascii) {
-        String cleanHex = ascii.replace(" ", "").trim().toUpperCase();
+        String cleanHex = ascii.trim();
         if (ascii == null || cleanHex.isEmpty()) {
             throw new IllegalArgumentException("Input cannot be null or empty");
         }
@@ -39,7 +39,7 @@ public class ConverterService {
         }
 
         // Remove spaces and validate
-        String cleanHex = hex.replace(" ", "").trim().toUpperCase();
+        String cleanHex = hex.replace(" ", "").trim();
 
         if (!cleanHex.matches("^[0-9A-F]+$")) {
             throw new IllegalArgumentException("Invalid HEX string. Only 0-9 and A-F characters are allowed.");
