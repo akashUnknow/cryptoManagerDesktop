@@ -44,6 +44,7 @@ public class MainController {
     // Sub-Controllers
     private StatusController statusController;
     private CryptoController cryptoController;
+    private SofController sofController;
     private ConverterController converterController;
     private UIStateController uiStateController;
     private ViewNavigationController viewNavigationController;
@@ -71,6 +72,10 @@ public class MainController {
         converterController = new ConverterController(statusController);
         converterController.setFields(conversionTypeCombo, converterInputArea,
                 converterOutputArea);
+        sofController = new SofController(resultArea, sofPdfLabel,
+                zipFileLabel);
+
+
 
         uiStateController = new UIStateController(statusController);
         uiStateController.setFields(algorithmList, modeCombo, paddingCombo,
@@ -168,12 +173,15 @@ public class MainController {
         viewNavigationController.toggleSof();
     }
 
-    public void uploadSofPdf(ActionEvent actionEvent) {
+    public void uploadSofPdf() {
+        sofController.uploadSofPdf();
     }
 
-    public void uploadRar(ActionEvent actionEvent) {
+    public void uploadRar() {
+        sofController.uploadRar();
     }
 
-    public void validateFiles(ActionEvent actionEvent) {
+    public void validateFiles() {
+        sofController.validateFiles();
     }
 }
