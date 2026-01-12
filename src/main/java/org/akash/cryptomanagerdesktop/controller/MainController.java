@@ -1,5 +1,6 @@
 package org.akash.cryptomanagerdesktop.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -8,6 +9,11 @@ import org.akash.cryptomanagerdesktop.util.UiHelper;
 public class MainController {
 
     public Button converterBtn;
+    public Button sofValidator;
+    public Label sofPdfLabel;
+    public Label zipFileLabel;
+    public TextArea resultArea;
+    public ScrollPane sofView;
     // FXML UI Components - Crypto View
     @FXML private ListView<String> algorithmList;
     @FXML private ComboBox<String> modeCombo;
@@ -73,7 +79,7 @@ public class MainController {
                 inputArea, key2Field, key3Field);
 
         viewNavigationController = new ViewNavigationController(statusController);
-        viewNavigationController.setFields(cryptoView, converterView, algorithmLabel);
+        viewNavigationController.setFields(cryptoView, converterView,sofView, algorithmLabel);
 
         uiHelper = new UiHelper();
     }
@@ -89,6 +95,7 @@ public class MainController {
         algorithmList.getSelectionModel().selectedItemProperty().addListener(
                 (obs, old, newVal) -> {
                     if (newVal != null) {
+                        viewNavigationController.showCryptoView();
                         uiStateController.updateUIForAlgorithm(newVal);
                         cryptoController.setCurrentAlgorithm(uiStateController.getCurrentAlgorithm());
                         viewNavigationController.setCurrentAlgorithm(uiStateController.getCurrentAlgorithm());
@@ -143,7 +150,7 @@ public class MainController {
     @FXML
     private void handleShowConverter() {
 //        viewNavigationController.showConverterView();
-        viewNavigationController.toggleView(converterBtn);
+        viewNavigationController.toggleConverter();
     }
 
 
@@ -155,5 +162,18 @@ public class MainController {
     @FXML
     private void handleCopyConverter() {
         converterController.handleCopyConverter();
+    }
+
+    public void handleShowValidator() {
+        viewNavigationController.toggleSof();
+    }
+
+    public void uploadSofPdf(ActionEvent actionEvent) {
+    }
+
+    public void uploadRar(ActionEvent actionEvent) {
+    }
+
+    public void validateFiles(ActionEvent actionEvent) {
     }
 }

@@ -253,3 +253,64 @@
 .version-text {
     -fx-text-fill: #64748b;
 }
+
+/* =========================================================
+   SOF VALIDATOR (Modern UI)
+   ========================================================= */
+
+.sof-card {
+    -fx-background-color: linear-gradient(
+        to bottom right,
+        #ffffff,
+        #f8fafc
+    );
+}
+
+/* Upload buttons */
+.sof-btn {
+    -fx-background-color: #6366f1; /* Indigo */
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16;
+    -fx-font-weight: bold;
+}
+
+.sof-btn:hover {
+    -fx-background-color: #4f46e5;
+}
+
+.sof-btn:pressed {
+    -fx-background-color: #4338ca;
+}
+
+/* File name label */
+.sof-file-label {
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+    -fx-background-color: #eef2ff;
+    -fx-padding: 6 10;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #c7d2fe;
+    -fx-border-width: 1;
+}
+
+/* Validation result text */
+#resultArea {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
+    -fx-font-size: 13px;
+}
+
+/* Success / Error states (optional use in controller) */
+.result-success {
+    -fx-text-fill: #16a34a;
+}
+
+.result-error {
+    -fx-text-fill: #dc2626;
+}
+
