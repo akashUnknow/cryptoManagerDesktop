@@ -275,8 +275,8 @@
     -fx-font-weight: bold;
 }
 
-.sof-btn:hover {
-    -fx-background-color: #4f46e5;
+.sof-card {
+    -fx-background-color: -fx-surface;
 }
 
 .sof-btn:pressed {
@@ -287,11 +287,11 @@
 .sof-file-label {
     -fx-text-fill: #374151;
     -fx-font-size: 12px;
-    -fx-background-color: #eef2ff;
+    -fx-background-color: #f1f5f9;
     -fx-padding: 6 10;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
-    -fx-border-color: #c7d2fe;
+    -fx-border-color: #d1d5db;
     -fx-border-width: 1;
 }
 

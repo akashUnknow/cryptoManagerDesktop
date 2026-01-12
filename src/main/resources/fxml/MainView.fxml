@@ -325,19 +325,29 @@
                     </VBox>
                 </VBox>
             </ScrollPane>
-            <!-- sofvalidator -->
-            <ScrollPane fx:id="sofView" visible="false" styleClass="content-scroll">
-                <VBox spacing="20" styleClass="main-content">
+            <!-- SOF VALIDATOR VIEW -->
+            <ScrollPane fx:id="sofView"
+                        fitToWidth="true"
+                        visible="false"
+                        styleClass="content-scroll">
+
+                <VBox spacing="20"
+                      styleClass="main-content"
+                      alignment="TOP_CENTER">
+
                     <padding>
-                        <Insets top="20" right="20" bottom="20" left="20"/>
+                        <Insets top="25" right="25" bottom="25" left="25"/>
                     </padding>
 
-                    <VBox styleClass="card sof-card" spacing="15">
+                    <!-- SOF CARD -->
+                    <VBox styleClass="card sof-card"
+                          spacing="18"
+                          maxWidth="700">
 
                         <!-- Header -->
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="📄" styleClass="card-icon">
-                                <font><Font size="22"/></font>
+                                <font><Font size="24"/></font>
                             </Label>
                             <VBox>
                                 <Label text="SOF Validator" styleClass="card-title"/>
@@ -349,40 +359,56 @@
                         <Separator/>
 
                         <!-- SOF PDF -->
-                        <HBox spacing="12" alignment="CENTER_LEFT">
+                        <HBox spacing="15" alignment="CENTER_LEFT">
                             <Button text="Upload SOF PDF"
                                     onAction="#uploadSofPdf"
-                                    styleClass="sof-btn"/>
-                            <Label fx:id="sofPdfLabel" styleClass="sof-file-label"/>
+                                    styleClass="tool-btn"
+                                    prefWidth="180"/>
+                            <Label fx:id="sofPdfLabel"
+                                   text="No file selected"
+                                   styleClass="sof-file-label"/>
                         </HBox>
 
                         <!-- ZIP -->
-                        <HBox spacing="12" alignment="CENTER_LEFT">
+                        <HBox spacing="15" alignment="CENTER_LEFT">
                             <Button text="Upload Zip File"
                                     onAction="#uploadRar"
-                                    styleClass="sof-btn"/>
-                            <Label fx:id="zipFileLabel" styleClass="sof-file-label"/>
+                                    styleClass="tool-btn"
+                                    prefWidth="180"/>
+                            <Label fx:id="zipFileLabel"
+                                   text="No file selected"
+                                   styleClass="sof-file-label"/>
                         </HBox>
 
+                        <Separator/>
+
                         <!-- Validate -->
-                        <HBox alignment="CENTER_RIGHT">
+                        <HBox alignment="CENTER">
                             <Button text="✔ Validate Files"
                                     onAction="#validateFiles"
                                     styleClass="primary-btn"
-                                    prefWidth="200"/>
+                                    prefWidth="220"
+                                    prefHeight="48"/>
                         </HBox>
 
                         <Separator/>
 
                         <!-- Result -->
-                        <TextArea fx:id="resultArea"
-                                  editable="false"
-                                  prefRowCount="6"
-                                  styleClass="output-area"
-                                  promptText="Validation result will appear here..."/>
+                        <VBox spacing="8">
+                            <Label text="Validation Result"
+                                   styleClass="field-label"/>
+                            <TextArea fx:id="resultArea"
+                                      editable="false"
+                                      prefRowCount="6"
+                                      wrapText="true"
+                                      styleClass="output-area"
+                                      promptText="Validation result will appear here..."/>
+                        </VBox>
+
                     </VBox>
                 </VBox>
             </ScrollPane>
+
 
 
         </StackPane>
